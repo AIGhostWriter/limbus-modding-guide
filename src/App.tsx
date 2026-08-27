@@ -147,7 +147,7 @@ function FunctionCatalog({ lockedSource, title }: { lockedSource?: 'glitch'|'mt'
   </article><Footer /></div>
 }
 
-function Footer() { return <footer className="footer"><div><Brand /><p>Community-authored documentation for the Lethe modding ecosystem.</p></div><div><b>RESOURCES</b><a href="https://aighostwriter.github.io/Lethe_Guide/" target="_blank" rel="noreferrer">Lethe Guide</a><a href="https://github.com/LEAGUE-OF-NINE" target="_blank" rel="noreferrer">LEAGUE OF NINE</a></div></footer> }
+function Footer() { return <footer className="footer"><div><Brand /><p>Community-authored documentation for the Lethe modding ecosystem.</p></div><div><b>RESOURCES</b><a href="https://github.com/LEAGUE-OF-NINE" target="_blank" rel="noreferrer">LEAGUE OF NINE</a></div></footer> }
 
 export default function App() {
   return <HashRouter><Shell><Routes><Route path="/" element={<Home />} /><Route path="/docs/*" element={<DocsRoute />} /><Route path="*" element={<Home />} /></Routes></Shell></HashRouter>
