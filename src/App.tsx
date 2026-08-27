@@ -14,7 +14,7 @@ function Brand() {
 function Shell({ children }: { children: React.ReactNode }) {
   const [open, setOpen] = useState(false)
   return <div className="app-shell">
-    <header className="topbar"><Brand /><nav><a href="https://aighostwriter.github.io/Lethe_Guide/" target="_blank" rel="noreferrer">Official Guide</a><a href="https://github.com/AIGhostWriter/limbus-modding-guide" target="_blank" rel="noreferrer">GitHub</a></nav><button onClick={() => setOpen(true)}>Menu</button></header>
+    <header className="topbar"><Brand /><nav><a href="https://aighostwriter.github.io/Lethe_Guide/" target="_blank" rel="noreferrer">Official Guide</a><a href="https://github.com/LEAGUE-OF-NINE" target="_blank" rel="noreferrer">GitHub</a></nav><button onClick={() => setOpen(true)}>Menu</button></header>
     <Sidebar open={open} close={() => setOpen(false)} />
     {open && <button className="scrim" onClick={() => setOpen(false)} aria-label="Close navigation" />}
     <main className="main">{children}</main>
@@ -46,7 +46,7 @@ function Home() {
       <div className="hero-inner">
         <h1><span>Lethe</span><br />Guide</h1>
         <p>Five focused libraries for script references, GlitchScript, MT extensions, preserved Lethe guides, and future DLL documentation.</p>
-        <div className="hero-actions"><Link className="button primary" to="/docs/reference/functions">Open Script Reference <span>→</span></Link><a className="button secondary" href="https://github.com/AIGhostWriter/limbus-modding-guide" target="_blank" rel="noreferrer">GitHub</a></div>
+        <div className="hero-actions"><Link className="button primary" to="/docs/reference/functions">Open Script Reference <span>→</span></Link><a className="button secondary" href="https://github.com/LEAGUE-OF-NINE" target="_blank" rel="noreferrer">GitHub</a></div>
       </div>
     </section>
     <section className="home-section component-index">
