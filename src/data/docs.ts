@@ -2,14 +2,25 @@ export type DocSection = { title: string; body: string; code?: string; language?
 export type DocPage = { title: string; kicker: string; summary: string; sections: DocSection[] }
 
 export const navGroups: { label: string; items: [string, string][] }[] = [
-  { label: 'START HERE', items: [['Overview','/docs/overview'],['Source & version policy','/docs/sources'],['Mod folder structure','/docs/file-structure'],['Your first script','/docs/first-script']] },
+  { label: 'START HERE', items: [['Overview','/docs/overview'],['Installation & data dump','/docs/install'],['Source & version policy','/docs/sources'],['Mod folder structure','/docs/file-structure'],['Your first script','/docs/first-script']] },
   { label: 'GLITCHSCRIPT', items: [['Execution model','/docs/glitch/structure'],['VALUE registers','/docs/glitch/values'],['Conditions & loops','/docs/glitch/conditions'],['Target selectors','/docs/glitch/targeting']] },
   { label: 'MT CUSTOM SCRIPTS', items: [['MT extensions','/docs/mt/overview'],['MTData','/docs/mt/data'],['Dynamic Locale','/docs/mt/locale'],['Global Lua Data','/docs/mt/lua']] },
-  { label: 'CONTENT AUTHORING', items: [['Identity skills','/docs/content/skills'],['Passives','/docs/content/passives'],['E.G.O. integration','/docs/content/ego'],['Boss unit & part','/docs/content/boss'],['Pattern design','/docs/content/patterns'],['Encounter stage','/docs/content/encounter'],['Custom buffs','/docs/content/buffs']] },
-  { label: 'REFERENCE', items: [['Function catalog','/docs/reference/functions'],['DLL development','/docs/reference/dll'],['Troubleshooting','/docs/reference/troubleshooting']] },
+  { label: 'CONTENT AUTHORING', items: [['Identity skills','/docs/content/skills'],['Passives','/docs/content/passives'],['E.G.O. integration','/docs/content/ego'],['Localization','/docs/content/locale'],['Boss unit & part','/docs/content/boss'],['Pattern design','/docs/content/patterns'],['Encounter stage','/docs/content/encounter'],['Custom buffs','/docs/content/buffs'],['Maps & stories','/docs/content/maps-stories'],['Motions, VFX & SFX','/docs/content/motions']] },
+  { label: 'PRACTICAL RECIPES', items: [['Basic recipes','/docs/recipes/basic'],['Intermediate recipes','/docs/recipes/intermediate'],['Advanced recipes','/docs/recipes/advanced']] },
+  { label: 'DLL HUB', items: [['DLL overview','/docs/dll'],['Battle & skill plugins','/docs/dll/battle'],['Cinematics & presentation','/docs/dll/presentation'],['Maps & stories','/docs/dll/maps'],['Mirror Dungeon systems','/docs/dll/mirror-dungeon'],['Build & deployment','/docs/dll/build']] },
+  { label: 'REFERENCE', items: [['Function catalog','/docs/reference/functions'],['Reload matrix','/docs/reference/reload'],['Troubleshooting','/docs/reference/troubleshooting']] },
 ]
 
 export const docs: Record<string, DocPage> = {
+  '/docs/install': {
+    title: 'Installation and data dump', kicker: 'START HERE',
+    summary: 'Prepare a reproducible Lethe workspace, obtain reference data, and know exactly when a reload is sufficient.',
+    sections: [
+      { title: 'Requirements', body: 'Use a working Lethe installation, a text editor with JSON support, and a clean mod directory. Keep the game data dump as read-only reference material; never edit dumped records in place.' },
+      { title: 'Dump static data', body: 'Use Lethe keybind 0 in a safe menu to generate the current static-data reference. Copy only the records you need into your mod and assign your own IDs. Regenerate the dump after updates that change record structures.' },
+      { title: 'Fast iteration', body: 'Keybind 8 reloads most ordinary data and locale. New DLL builds, new custom_buffs registrations, and new custom_unit_keywords require a full game restart. Verify one small change per cycle and keep LogOutput.log open beside the editor.' },
+    ],
+  },
   '/docs/overview': {
     title: 'Documentation overview', kicker: 'START HERE',
     summary: 'A practical field manual for authors who already have Lethe installed and want to build skills, identities, encounters, bosses, and native extensions.',
@@ -307,6 +318,131 @@ Modular/TIMING:WhenUse/dlactivatepath(1)` },
     "turn": 2
   }
 }`, language: 'json' },
+    ],
+  },
+  '/docs/content/locale': {
+    title: 'Localization', kicker: 'CONTENT AUTHORING',
+    summary: 'Treat locale as part of the data graph: an ID is not complete until every player-facing name, description, and keyword resolves.',
+    sections: [
+      { title: 'Directory contract', body: 'Place language files under custom_limbus_locale/<LANG>. Mirror the official list names such as personalityList, skillList, passiveList, bufList, and keywordList. Keep IDs identical to their data records.' },
+      { title: 'Minimal skill locale', body: 'A skill normally needs a name and description. Keep description placeholders aligned with the runtime values supplied by the script.', code: `{
+  "dataList": [{
+    "id": 681001010,
+    "name": "Workshop Strike",
+    "desc": "On hit, inflict 3 Workshop Mark."
+  }]
+}`, language: 'json' },
+      { title: 'Dynamic text', body: 'MT Dynamic Locale can read runtime values and custom properties. Use it only after the static entry resolves correctly, and provide safe fallback text when the value is unavailable.' },
+    ],
+  },
+  '/docs/content/maps-stories': {
+    title: 'Maps and stories', kicker: 'CONTENT AUTHORING',
+    summary: 'Connect a battle map, story script, and encounter node without hiding the dependency chain.',
+    sections: [
+      { title: 'Map selection', body: 'Start from a confirmed dumped mapName and explicit mapSize. A stage that loads with a blank arena usually has an invalid map reference or a plugin-specific asset requirement.' },
+      { title: 'Story chain', body: 'A custom chapter connects chapter registration, node UI, encounter data, and story scripts. Test the story file independently before attaching it to a battle transition.' },
+      { title: 'StoryScriptLoader extension', body: 'The local StoryScriptLoader project adds battle-story encounter discovery and a configurable story JSON format. Its guide documents optional fields, folder layout, and the runtime loading path; the final page will distinguish standard Lethe story data from DLL-provided behavior.' },
+    ],
+  },
+  '/docs/content/motions': {
+    title: 'Motions, VFX and SFX', kicker: 'CONTENT AUTHORING',
+    summary: 'Build presentation assets as a separate layer so combat logic stays testable when bundles or effects fail.',
+    sections: [
+      { title: 'Motion package', body: 'The motions ecosystem separates bundle setup, attack timelines, character VFX, dashboard VFX, buff VFX, SFX, and screen borders. Begin with the smallest valid motion before adding effects.' },
+      { title: 'Asset isolation', body: 'Give bundles and assets stable unique names. Verify loading first, then playback, then timing. Avoid diagnosing a missing VFX by changing the skill script and bundle simultaneously.' },
+      { title: 'Runtime control', body: 'MT functions can play or alter motions at runtime. Document whether a command targets a unit, skill, dashboard element, or world position, because each context has different valid timings.' },
+    ],
+  },
+  '/docs/recipes/basic': {
+    title: 'Basic recipes', kicker: 'PRACTICAL RECIPES',
+    summary: 'Copy-ready effects that demonstrate one timing, one target, and one consequence at a time.',
+    sections: [
+      { title: 'Apply a status on hit', body: 'Attach this to a coin. OSA fires only when that coin successfully attacks.', code: 'Modular/TIMING:OSA/buff(Target,Combustion,3,0,0)' },
+      { title: 'Recover SP on use', body: 'Attach this at skill level so it runs once per skill rather than once per coin.', code: 'Modular/TIMING:WhenUse/healsp(Self,5)' },
+      { title: 'Gain a shield', body: 'Use a self target and verify the shield appears before introducing any scaling formula.', code: 'Modular/TIMING:WhenUse/shield(Self,10)' },
+    ],
+  },
+  '/docs/recipes/intermediate': {
+    title: 'Intermediate recipes', kicker: 'PRACTICAL RECIPES',
+    summary: 'Combine acquisition, conditions, registers, and loops while keeping the execution order visible.',
+    sections: [
+      { title: 'Scale from a status', body: 'Clear registers, read the target status, cap the result, and apply the final value.', code: 'Modular/TIMING:OSA/CLEARVALUES/VALUE_0:getbuff(Target,Combustion)/VALUE_0:math(VALUE_0!5)/bonusdmg(Target,VALUE_0,COMBAT)' },
+      { title: 'Conditional support', body: 'Read an ally value before gating the remaining batches.', code: 'Modular/TIMING:RoundStart/VALUE_0:getspeed(SlowestAlly)/CONTINUEIF(VALUE_0<5)/buff(SlowestAlly,Haste,3,0,1)' },
+      { title: 'Loop safely', body: 'Use LOOP only when each member needs independent acquisition and conditions. Clear or overwrite registers inside the loop to prevent values leaking between members.' },
+    ],
+  },
+  '/docs/recipes/advanced': {
+    title: 'Advanced recipes', kicker: 'PRACTICAL RECIPES',
+    summary: 'Compose persistent state, instance identity, random branches, and Lua into maintainable battle systems.',
+    sections: [
+      { title: 'Persistent hit counter', body: 'Read MTData, increment it, store it, and trigger a payoff at the threshold. Reset the key deliberately at RoundStart or after the payoff rather than relying on VALUE lifetime.' },
+      { title: 'Per-instance state', body: 'Use instance IDs when multiple copies of the same unit or buff can exist. Character IDs identify a record type; instance IDs identify the live combat object.' },
+      { title: 'State-machine rule', body: 'Give every state one entry condition, one effect, and one explicit transition. Log the state name before applying damage or changing skills so a bad transition is observable.' },
+    ],
+  },
+  '/docs/dll': {
+    title: 'DLL plugin hub', kicker: 'DLL HUB',
+    summary: 'A catalog of native extensions found in the local development workspace, separated by purpose and documented by runtime responsibility.',
+    sections: [
+      { title: 'Use a DLL last', body: 'Choose a DLL when JSON, Modular scripts, MT extensions, and Lua cannot access the required engine lifecycle or presentation API. Native patches carry game-version and mod-conflict risk.' },
+      { title: 'Documentation standard', body: 'Every plugin page records purpose, visible result, requirements, configuration, patch targets, runtime flow, build path, verification logs, conflicts, limitations, and rollback.' },
+      { title: 'Stability labels', body: 'Stable means a repeatable user workflow exists. Development means the main path works but coverage is incomplete. Research means the documents describe investigation or observed call flow rather than a supported release.' },
+    ],
+  },
+  '/docs/dll/battle': {
+    title: 'Battle and skill plugins', kicker: 'DLL HUB',
+    summary: 'Plugins that alter target selection, action flow, field state, passives, or skill execution.',
+    sections: [
+      { title: 'GwangYeokNansa / AlphaStrike', body: 'Implements coin-by-coin random ally targeting for registered enemy skills. The local guide covers DLL deployment, skill-ID registration, JSON prerequisites, ID collision avoidance, logs, and troubleshooting. AlphaStrike research identifies the working hook and records failed approaches that should not be repeated.' },
+      { title: 'SkillInterrupter', body: 'Interrupts the current skill through a narrow runtime hook. Its local documentation explains why the hook was selected, the minimal skill JSON, coexistence with other abilities, deployment, and expected log output.' },
+      { title: 'BattleMessage and FireFieldForcer', body: 'BattleMessage parses passive commands at defined timings and maps special Dante abilities. FireFieldForcer forces a field effect through native APIs and includes a full patch example, unit retargeting, build steps, and effect-specific troubleshooting.' },
+      { title: 'Additional inventory', body: 'EncounterRetry, Clash Overdrive, LetheGiftLua, EgoGiftInjector, UnitScaler, SkillRoulette, SubUnitSpawner, UnitRetreater, and related experiments will receive separate pages after their source-level behavior is verified.' },
+    ],
+  },
+  '/docs/dll/presentation': {
+    title: 'Cinematics and presentation', kicker: 'DLL HUB',
+    summary: 'Native extensions for pre-battle sequences, lyrics, trails, UI control, and showcase presentation.',
+    sections: [
+      { title: 'BattleCinematicPlayer', body: 'Discovers encounter mappings, loads a Unity bundle, and drives cinematics.json. The local English guide covers package layout, Aqua bundle construction, installation, verification, configurable values, and current technical coupling.' },
+      { title: 'Native pre-battle research', body: 'The companion research tracks StageController call order, ProduceWait transitions, BattleProduceManager state, callback order, camera changes, HUD visibility, PlayableDirector state, and Harmony conflicts. It will be labeled Research rather than presented as a stable API.' },
+      { title: 'LyricsOverride and visual utilities', body: 'LyricsOverride documents configuration fields, text styles, Harmony patches, and build steps. BattleCinematicObserver, SpriteTrailRuntime, GachaShowcase, NoMoreUI, and PR_MIRROR remain source-verification candidates.' },
+    ],
+  },
+  '/docs/dll/maps': {
+    title: 'Map and story plugins', kicker: 'DLL HUB',
+    summary: 'Extensions that load animated media, custom story scripts, or additional chapter behavior.',
+    sections: [
+      { title: 'AnimatedMapSupport', body: 'Supports static images, GIF, video, and PNG sequences. Its JSON system includes common object fields, idle animation presets, event triggers, movement, scale, rotation, fade, tint, shake, media controls, loops, and waypoint movement.' },
+      { title: 'GifMapSupport', body: 'A narrower animated-map implementation retained as a separate compatibility entry until overlap with AnimatedMapSupport is verified.' },
+      { title: 'Story plugins', body: 'StoryScriptLoader has a documented battle-story format and runtime loading path. StoryEditorPlugin, CustomStoryBattle, and MyCustomChapterMod will be described from their actual registration and lifecycle code.' },
+    ],
+  },
+  '/docs/dll/mirror-dungeon': {
+    title: 'Mirror Dungeon systems', kicker: 'DLL HUB',
+    summary: 'Research and extensions for reproducing server-backed Mirror Dungeon flows locally.',
+    sections: [
+      { title: 'MDOffline scope', body: 'The local plan covers team formation, star blessings, theme-pack selection, node movement, interaction buttons, stage panels, E.G.O gift rewards and inspection, floor rewards, repeated floors, parallel overlap, Extreme constraints, and final results.' },
+      { title: 'Encounter configuration', body: 'A separate user guide documents changing the custom encounter through configuration, applying the change, verification, and the internal path that no longer needs manual source edits.' },
+      { title: 'Research boundary', body: 'MDOffline, MDServerBridge, MirrorDungeon, and OpenLethe integrations depend on packet and server-boundary behavior. Pages will explicitly separate confirmed offline replacements from planned phases and unsupported live-service behavior.' },
+    ],
+  },
+  '/docs/dll/build': {
+    title: 'Build and deployment', kicker: 'DLL HUB',
+    summary: 'A conservative workflow for BepInEx IL2CPP plugins that minimizes stale assemblies and hard-to-diagnose patch conflicts.',
+    sections: [
+      { title: 'Project references', body: 'Reference the exact current interop and BepInEx assemblies used by the installed game. Avoid copying arbitrary older DLLs into the project because signatures can compile while failing at runtime.' },
+      { title: 'Observe before patching', body: 'Decompile the target type, identify the real caller, and add a unique observation log before changing behavior. Patch the narrowest stable method and document Prefix, Postfix, or transpiler ownership.' },
+      { title: 'Deploy and verify', body: 'Close the game, build the release configuration, copy only the intended plugin and required dependencies, restart fully, and search LogOutput.log for the plugin GUID and a unique verification marker.' },
+      { title: 'Rollback', body: 'Keep configuration and generated assets separate from the plugin binary. To roll back, remove or restore the specific DLL rather than replacing the complete plugins directory.' },
+    ],
+  },
+  '/docs/reference/reload': {
+    title: 'Reload and restart matrix', kicker: 'REFERENCE',
+    summary: 'Choose the shortest safe feedback loop for the type of asset you changed.',
+    sections: [
+      { title: 'Usually reloadable', body: 'Most existing JSON records, locale edits, Modular script strings, encounter values, patterns, and numeric balance changes can be tested with Lethe keybind 8.' },
+      { title: 'Full restart required', body: 'DLL changes, newly registered custom_buffs, newly registered custom_unit_keywords, plugin initialization, and assembly reference changes require closing and reopening the game.' },
+      { title: 'When uncertain', body: 'Restart once before diagnosing the implementation. If the issue disappears only after a restart, record that data type as restart-sensitive in the project README.' },
     ],
   },
   '/docs/reference/functions': {

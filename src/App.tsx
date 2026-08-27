@@ -33,6 +33,7 @@ function Home() {
     ['01','GlitchScript','Learn timings, VALUE registers, conditions, selectors, and consequences.','/docs/glitch/structure'],
     ['02','MT Extensions','Add persistent state, dynamic locale, advanced targets, and runtime control.','/docs/mt/overview'],
     ['03','Lethe Content','Build identities, bosses, encounter stages, patterns, and custom buffs.','/docs/content/encounter'],
+    ['04','DLL Hub','Explore native battle, cinematic, map, story, and Mirror Dungeon extensions.','/docs/dll'],
   ]
   return <div className="home">
     <section className="hero">
@@ -43,7 +44,7 @@ function Home() {
         <p>A code-first field manual for creating Limbus Company skills, identities, bosses, encounters, and native extensions.</p>
         <div className="hero-actions"><Link className="button primary" to="/docs/overview">Start reading <span>→</span></Link><a className="button secondary" href="https://github.com/AIGhostWriter/limbus-modding-guide" target="_blank" rel="noreferrer">View on GitHub</a></div>
         <div className="quick-code"><div className="code-top"><span><i /><i /><i /></span><b>skill abilityScriptList</b><em>MODULAR</em></div><pre><code><span className="c-dim">Modular/</span><span className="c-purple">TIMING</span>:<span className="c-blue">WhenUse</span><br /><span className="c-dim">/</span><span className="c-green">VALUE_0</span>:getsp(<span className="c-orange">Self</span>)<br /><span className="c-dim">/</span>CONTINUEIF(<span className="c-green">VALUE_0</span>&gt;29)<br /><span className="c-dim">/</span>buff(<span className="c-orange">Self</span>,Haste,2,0,1)</code></pre></div>
-        <div className="hero-stats"><div><b>20</b><span>focused chapters</span></div><div><b>4</b><span>authoring layers</span></div><div><b>1</b><span>verification workflow</span></div></div>
+        <div className="hero-stats"><div><b>35+</b><span>focused chapters</span></div><div><b>5</b><span>authoring layers</span></div><div><b>1</b><span>verification workflow</span></div></div>
       </div>
     </section>
     <section className="home-section">
@@ -94,4 +95,3 @@ function Footer() { return <footer className="footer"><div><Brand /><p>Unofficia
 export default function App() {
   return <HashRouter><Shell><Routes><Route path="/" element={<Home />} /><Route path="/docs/*" element={<DocsRoute />} /><Route path="*" element={<Home />} /></Routes></Shell></HashRouter>
 }
-
