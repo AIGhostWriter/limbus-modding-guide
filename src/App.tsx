@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react'
 import { HashRouter, Link, NavLink, Route, Routes, useLocation } from 'react-router-dom'
 import { docs, navGroups } from './data/docs'
 import type { DocPage } from './data/docs'
+import { functions } from './data/functions'
 
 function Brand() {
   return <Link to="/" className="brand"><span className="brand-mark">L</span><span><b>LETHE LAB</b><small>MODDING DOCUMENTATION</small></span></Link>
@@ -44,7 +45,7 @@ function Home() {
         <p>A code-first field manual for creating Limbus Company skills, identities, bosses, encounters, and native extensions.</p>
         <div className="hero-actions"><Link className="button primary" to="/docs/overview">Start reading <span>→</span></Link><a className="button secondary" href="https://github.com/AIGhostWriter/limbus-modding-guide" target="_blank" rel="noreferrer">View on GitHub</a></div>
         <div className="quick-code"><div className="code-top"><span><i /><i /><i /></span><b>skill abilityScriptList</b><em>MODULAR</em></div><pre><code><span className="c-dim">Modular/</span><span className="c-purple">TIMING</span>:<span className="c-blue">WhenUse</span><br /><span className="c-dim">/</span><span className="c-green">VALUE_0</span>:getsp(<span className="c-orange">Self</span>)<br /><span className="c-dim">/</span>CONTINUEIF(<span className="c-green">VALUE_0</span>&gt;29)<br /><span className="c-dim">/</span>buff(<span className="c-orange">Self</span>,Haste,2,0,1)</code></pre></div>
-        <div className="hero-stats"><div><b>35+</b><span>focused chapters</span></div><div><b>5</b><span>authoring layers</span></div><div><b>1</b><span>verification workflow</span></div></div>
+        <div className="hero-stats"><div><b>150+</b><span>reference entries</span></div><div><b>35+</b><span>focused chapters</span></div><div><b>5</b><span>authoring layers</span></div></div>
       </div>
     </section>
     <section className="home-section">
@@ -86,8 +87,33 @@ function Article({ page }: { page: DocPage }) {
 
 function DocsRoute() {
   const location = useLocation()
+  if (location.pathname === '/docs/reference/functions') return <FunctionCatalog />
   const page = docs[location.pathname] ?? docs['/docs/overview']
   return <Article page={page} />
+}
+
+function FunctionCatalog() {
+  const [query, setQuery] = useState('')
+  const [category, setCategory] = useState('all')
+  const [source, setSource] = useState('all')
+  const visible = functions.filter(item =>
+    (category === 'all' || item.category === category) &&
+    (source === 'all' || item.source === source || item.source === 'both') &&
+    `${item.name} ${item.signature}`.toLowerCase().includes(query.toLowerCase())
+  )
+  const explain = (item: typeof functions[number]) => item.category === 'timing'
+    ? `Registers a script at the ${item.name} lifecycle event. Attach it only to an owner that supports this event.`
+    : item.category === 'acquirer'
+      ? `Reads ${item.name} data and returns a value that can be stored in VALUE_0–VALUE_9 or consumed by a condition.`
+      : `Changes battle state through ${item.name}. Check target cardinality and argument order before combining it with conditions.`
+  const cleanExample = (value?: string) => value?.split('\n').filter(line => !/[가-힣]/.test(line)).join('\n').trim()
+  return <div className="article-wrap"><article className="article catalog-page">
+    <div className="breadcrumbs"><Link to="/">Docs</Link><span>/</span><span>REFERENCE</span></div>
+    <div className="article-head"><span>COMPLETE REFERENCE</span><h1>Script function catalog</h1><p>{functions.length} timings, acquirers, and consequences from the GlitchScript and MT Custom Scripts snapshots. Each entry preserves its callable signature, source, parameters, example, and version label.</p></div>
+    <div className="catalog-tools"><input aria-label="Search functions" value={query} onChange={e => setQuery(e.target.value)} placeholder="Search by function or signature…" /><select aria-label="Filter category" value={category} onChange={e => setCategory(e.target.value)}><option value="all">All categories</option><option value="timing">Timings</option><option value="acquirer">Acquirers</option><option value="consequence">Consequences</option></select><select aria-label="Filter source" value={source} onChange={e => setSource(e.target.value)}><option value="all">All sources</option><option value="glitch">GlitchScript</option><option value="mt">MT Scripts</option></select></div>
+    <div className="catalog-summary"><b>{visible.length}</b> entries shown <span>•</span> Open an entry to inspect its contract.</div>
+    <div className="function-list">{visible.map((item, index) => <details className="function-entry" key={`${item.category}-${item.name}-${index}`}><summary><span className={`kind ${item.category}`}>{item.category}</span><code>{item.name}</code><small>{item.source === 'both' ? 'GlitchScript + MT' : item.source === 'mt' ? 'MT Scripts' : 'GlitchScript'}</small><b>＋</b></summary><div className="function-body"><p>{explain(item)}</p><h3>Signature</h3><CodeBlock code={item.signature} language="modular" />{item.params?.length ? <><h3>Parameters</h3><div className="param-table">{item.params.map(param => <div key={param.name}><code>{param.name}</code><span>Argument accepted by this function. Match its value type and position to the signature.</span></div>)}</div></> : <p className="no-params">No separately documented parameters.</p>}{cleanExample(item.example) && <><h3>Example</h3><CodeBlock code={cleanExample(item.example)!} language="modular" /></>}<div className="contract-note"><b>Verification</b><span>Test this entry alone at a confirmed timing and inspect LogOutput.log before composing it with other functions.</span>{item.version && <em>Version {item.version}</em>}</div></div></details>)}</div>
+  </article><Footer /></div>
 }
 
 function Footer() { return <footer className="footer"><div><Brand /><p>Unofficial, community-authored documentation for the Lethe modding ecosystem.</p></div><div><b>RESOURCES</b><a href="https://aighostwriter.github.io/Lethe_Guide/" target="_blank" rel="noreferrer">Official Lethe Guide</a><a href="https://github.com/LEAGUE-OF-NINE" target="_blank" rel="noreferrer">LEAGUE OF NINE</a></div></footer> }
