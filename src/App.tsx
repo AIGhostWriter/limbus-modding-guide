@@ -34,20 +34,19 @@ function Sidebar({ open, close }: { open: boolean; close: () => void }) {
 
 function Home() {
   const cards = [
-    ['01','Content Authoring','Original authoring documents for boss discovery, encounters, identities, skills, passives, buffs, patterns, locale, and complete working samples.','/docs/original/chapter-1'],
-    ['02','Script Reference','Searchable signatures for every recorded timing, acquirer, and consequence.','/docs/reference/functions'],
-    ['03','GlitchScript','GlitchScript-only syntax, execution rules, VALUE registers, conditions, loops, targeting, and callable entries.','/docs/reference/glitch'],
-    ['04','MT Custom Scripts','MT-only timings, functions, MTData, Dynamic Locale, Global Lua Data, and version-sensitive extensions.','/docs/reference/mt'],
-    ['05','Lethe Guide','The original five-part English guide preserved as complete documents without summarized replacement text.','/docs/original/chapter-1'],
-    ['06','DLL','Reserved for a clean rebuild of native plugin documentation from original project data.','/docs/dll'],
+    ['01','Script Reference','Searchable signatures for every recorded timing, acquirer, and consequence.','/docs/reference/functions'],
+    ['02','GlitchScript','GlitchScript-only syntax, execution rules, VALUE registers, conditions, loops, targeting, and callable entries.','/docs/reference/glitch'],
+    ['03','MT Custom Scripts','MT-only timings, functions, MTData, Dynamic Locale, Global Lua Data, and version-sensitive extensions.','/docs/reference/mt'],
+    ['04','Lethe Guide','The original five-part English guide preserved as complete documents without summarized replacement text.','/docs/original/chapter-1'],
+    ['05','DLL','Reserved for a clean rebuild of native plugin documentation from original project data.','/docs/dll'],
   ]
   return <div className="home">
     <section className="hero">
       <div className="hero-grid" /><div className="hero-glow" />
       <div className="hero-inner">
         <h1><span>Lethe</span><br />Guide</h1>
-        <p>Six focused libraries for original Lethe authoring data, script references, GlitchScript, MT extensions, preserved guides, and future DLL documentation.</p>
-        <div className="hero-actions"><Link className="button primary" to="/docs/original/chapter-1">Open Content Authoring <span>→</span></Link><a className="button secondary" href="https://github.com/AIGhostWriter/limbus-modding-guide" target="_blank" rel="noreferrer">GitHub</a></div>
+        <p>Five focused libraries for script references, GlitchScript, MT extensions, preserved Lethe guides, and future DLL documentation.</p>
+        <div className="hero-actions"><Link className="button primary" to="/docs/reference/functions">Open Script Reference <span>→</span></Link><a className="button secondary" href="https://github.com/AIGhostWriter/limbus-modding-guide" target="_blank" rel="noreferrer">GitHub</a></div>
       </div>
     </section>
     <section className="home-section component-index">

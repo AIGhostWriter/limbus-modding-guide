@@ -2,7 +2,6 @@ export type DocSection = { title: string; body: string; code?: string; language?
 export type DocPage = { title: string; kicker: string; summary: string; sections: DocSection[] }
 
 export const navGroups: { label: string; items: [string, string][] }[] = [
-  { label: 'CONTENT AUTHORING', items: [['Boss data discovery · Original','/docs/original/chapter-1'],['Encounter authoring · Original','/docs/original/chapter-2'],['Advanced Lua · Original','/docs/original/chapter-3'],['Complete boss sample · Original','/docs/original/chapter-4'],['Custom Identity · Original','/docs/original/identity']] },
   { label: 'SCRIPT REFERENCE', items: [['All functions','/docs/reference/functions'],['Reload matrix','/docs/reference/reload'],['Troubleshooting','/docs/reference/troubleshooting']] },
   { label: 'GLITCHSCRIPT', items: [['GlitchScript catalog','/docs/reference/glitch'],['Execution model','/docs/glitch/structure'],['VALUE registers','/docs/glitch/values'],['Conditions & loops','/docs/glitch/conditions'],['Target selectors','/docs/glitch/targeting']] },
   { label: 'MT CUSTOM SCRIPTS', items: [['MT catalog','/docs/reference/mt'],['MT extensions','/docs/mt/overview'],['MTData','/docs/mt/data'],['Dynamic Locale','/docs/mt/locale'],['Global Lua Data','/docs/mt/lua']] },
@@ -176,7 +175,7 @@ Modular/TIMING:WhenUse/dlactivatepath(1)` },
     ],
   },
   '/docs/content/skills': {
-    title: 'Identity and enemy skills', kicker: 'CONTENT AUTHORING',
+    title: 'Identity and enemy skills', kicker: 'LETHE GUIDE',
     summary: 'A skill combines target rules, combat type, motion, base power, coins, and behavior scripts.',
     sections: [
       { title: 'Core shape', body: 'Start from a dumped skill of the same owner and motion type. Preserve fields you do not fully understand, then change one concern at a time.', code: `{
@@ -203,7 +202,7 @@ Modular/TIMING:WhenUse/dlactivatepath(1)` },
     ],
   },
   '/docs/content/passives': {
-    title: 'Passives', kicker: 'CONTENT AUTHORING',
+    title: 'Passives', kicker: 'LETHE GUIDE',
     summary: 'Passives are long-lived event listeners. Their main risks are duplicate activation, stale registers, and effects firing for the wrong unit.',
     sections: [
       { title: 'Minimal passive', body: 'Keep one timing and one consequence until ownership and activation are verified.', code: `{
@@ -217,7 +216,7 @@ Modular/TIMING:WhenUse/dlactivatepath(1)` },
     ],
   },
   '/docs/content/ego': {
-    title: 'E.G.O. integration', kicker: 'CONTENT AUTHORING',
+    title: 'E.G.O. integration', kicker: 'LETHE GUIDE',
     summary: 'E.G.O. content connects awakening/corrosion skills, resource costs, passives, locale, and the owning identity.',
     sections: [
       { title: 'Build order', body: 'Verify the awakening skill first, then corrosion, then cost and passive activation. Reusing a known E.G.O. record as a base prevents missing display and ownership fields.' },
@@ -226,7 +225,7 @@ Modular/TIMING:WhenUse/dlactivatepath(1)` },
     ],
   },
   '/docs/content/boss': {
-    title: 'Boss unit and body part', kicker: 'CONTENT AUTHORING',
+    title: 'Boss unit and body part', kicker: 'LETHE GUIDE',
     summary: 'The abnormality unit owns behavior and skills; the abnormality part receives attacks and owns HP, speed, break sections, and resistances.',
     sections: [
       { title: 'Unit-to-part contract', body: 'Every ID in abnormalityPartList must resolve to a part record. Every pattern skill must be registered in attributeList.', code: `{
@@ -245,7 +244,7 @@ Modular/TIMING:WhenUse/dlactivatepath(1)` },
     ],
   },
   '/docs/content/patterns': {
-    title: 'Boss pattern design', kicker: 'CONTENT AUTHORING',
+    title: 'Boss pattern design', kicker: 'LETHE GUIDE',
     summary: 'patternList is a turn-indexed schedule of action slots. The engine cycles back to the first pattern after the final entry.',
     sections: [
       { title: 'One slot', body: 'A slot contains parent choices and child skill choices. Keep chance values simple until deterministic behavior works.', code: `{
@@ -262,7 +261,7 @@ Modular/TIMING:WhenUse/dlactivatepath(1)` },
     ],
   },
   '/docs/content/encounter': {
-    title: 'Encounter stage', kicker: 'CONTENT AUTHORING',
+    title: 'Encounter stage', kicker: 'LETHE GUIDE',
     summary: 'A visible custom stage requires encounter.json and subchapterui.json, plus every enemy unit referenced by the wave.',
     sections: [
       { title: 'Encounter record', body: 'The encounter defines stage rules, participant limits, map, waves, positions, BGM, cost, and turn limit.', code: `{
@@ -289,7 +288,7 @@ Modular/TIMING:WhenUse/dlactivatepath(1)` },
     ],
   },
   '/docs/content/buffs': {
-    title: 'Custom buffs', kicker: 'CONTENT AUTHORING',
+    title: 'Custom buffs', kicker: 'LETHE GUIDE',
     summary: 'A custom buff needs keyword registration, behavior data, locale, and an application path that all share the exact same ID.',
     sections: [
       { title: 'Required files', body: 'Create custom_buffs/WorkshopMark.txt, custom_limbus_data/buff/workshop_mark.json, and EN locale entries under bufList and keywordList. Add a custom sprite only when needed.' },
@@ -320,7 +319,7 @@ Modular/TIMING:WhenUse/dlactivatepath(1)` },
     ],
   },
   '/docs/content/locale': {
-    title: 'Localization', kicker: 'CONTENT AUTHORING',
+    title: 'Localization', kicker: 'LETHE GUIDE',
     summary: 'Treat locale as part of the data graph: an ID is not complete until every player-facing name, description, and keyword resolves.',
     sections: [
       { title: 'Directory contract', body: 'Place language files under custom_limbus_locale/<LANG>. Mirror the official list names such as personalityList, skillList, passiveList, bufList, and keywordList. Keep IDs identical to their data records.' },
@@ -335,7 +334,7 @@ Modular/TIMING:WhenUse/dlactivatepath(1)` },
     ],
   },
   '/docs/content/maps-stories': {
-    title: 'Maps and stories', kicker: 'CONTENT AUTHORING',
+    title: 'Maps and stories', kicker: 'LETHE GUIDE',
     summary: 'Connect a battle map, story script, and encounter node without hiding the dependency chain.',
     sections: [
       { title: 'Map selection', body: 'Start from a confirmed dumped mapName and explicit mapSize. A stage that loads with a blank arena usually has an invalid map reference or a plugin-specific asset requirement.' },
@@ -344,7 +343,7 @@ Modular/TIMING:WhenUse/dlactivatepath(1)` },
     ],
   },
   '/docs/content/motions': {
-    title: 'Motions, VFX and SFX', kicker: 'CONTENT AUTHORING',
+    title: 'Motions, VFX and SFX', kicker: 'LETHE GUIDE',
     summary: 'Build presentation assets as a separate layer so combat logic stays testable when bundles or effects fail.',
     sections: [
       { title: 'Motion package', body: 'The motions ecosystem separates bundle setup, attack timelines, character VFX, dashboard VFX, buff VFX, SFX, and screen borders. Begin with the smallest valid motion before adding effects.' },
