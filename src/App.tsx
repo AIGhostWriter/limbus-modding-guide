@@ -14,7 +14,7 @@ function Brand() {
 function Shell({ children }: { children: React.ReactNode }) {
   const [open, setOpen] = useState(false)
   return <div className="app-shell">
-    <header className="topbar"><Brand /><nav><a href="https://aighostwriter.github.io/Lethe_Guide/" target="_blank" rel="noreferrer">Official Guide</a><a href="https://github.com/LEAGUE-OF-NINE" target="_blank" rel="noreferrer">GitHub</a></nav><button onClick={() => setOpen(true)}>Menu</button></header>
+    <header className="topbar"><Brand /><nav><a href="https://aighostwriter.github.io/Lethe_Guide/" target="_blank" rel="noreferrer">Lethe Guide</a><a href="https://github.com/LEAGUE-OF-NINE" target="_blank" rel="noreferrer">GitHub</a></nav><button onClick={() => setOpen(true)}>Menu</button></header>
     <Sidebar open={open} close={() => setOpen(false)} />
     {open && <button className="scrim" onClick={() => setOpen(false)} aria-label="Close navigation" />}
     <main className="main">{children}</main>
@@ -60,7 +60,7 @@ function Home() {
         <a href="https://rentry.co/mtcustomscripts" target="_blank" rel="noreferrer"><i>MT</i><b>MT Custom Scripts</b><span>Extended timings, state and runtime control</span></a>
         <a href="https://rentry.co/modularexamples" target="_blank" rel="noreferrer"><i>EX</i><b>Modular Examples</b><span>Basic through advanced compositions</span></a>
         <a href="https://github.com/LEAGUE-OF-NINE" target="_blank" rel="noreferrer"><i>GH</i><b>LEAGUE OF NINE</b><span>Loaders, plugins, schemas and source</span></a>
-        <a href="https://lethelc.site/dashboard" target="_blank" rel="noreferrer"><i>LC</i><b>Lethe Dashboard</b><span>Official ecosystem entry point</span></a>
+        <a href="https://lethelc.site/dashboard" target="_blank" rel="noreferrer"><i>LC</i><b>Lethe Dashboard</b><span>Lethe ecosystem dashboard</span></a>
       </div>
     </section>
     <Footer />
@@ -147,7 +147,7 @@ function FunctionCatalog({ lockedSource, title }: { lockedSource?: 'glitch'|'mt'
   </article><Footer /></div>
 }
 
-function Footer() { return <footer className="footer"><div><Brand /><p>Unofficial, community-authored documentation for the Lethe modding ecosystem.</p></div><div><b>RESOURCES</b><a href="https://aighostwriter.github.io/Lethe_Guide/" target="_blank" rel="noreferrer">Official Lethe Guide</a><a href="https://github.com/LEAGUE-OF-NINE" target="_blank" rel="noreferrer">LEAGUE OF NINE</a></div></footer> }
+function Footer() { return <footer className="footer"><div><Brand /><p>Community-authored documentation for the Lethe modding ecosystem.</p></div><div><b>RESOURCES</b><a href="https://aighostwriter.github.io/Lethe_Guide/" target="_blank" rel="noreferrer">Lethe Guide</a><a href="https://github.com/LEAGUE-OF-NINE" target="_blank" rel="noreferrer">LEAGUE OF NINE</a></div></footer> }
 
 export default function App() {
   return <HashRouter><Shell><Routes><Route path="/" element={<Home />} /><Route path="/docs/*" element={<DocsRoute />} /><Route path="*" element={<Home />} /></Routes></Shell></HashRouter>

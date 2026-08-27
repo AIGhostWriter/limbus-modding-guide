@@ -34,7 +34,7 @@ export default function Layout() {
           </div>}
           <article className="prose"><Outlet /></article>
           <footer className="mt-20 pt-7 border-t border-[var(--line)] flex flex-wrap gap-3 justify-between text-[11px] uppercase tracking-[.12em] text-[var(--muted)]">
-            <span>Unofficial modding field manual</span><span>GlitchScript · MT Custom Scripts · DLL</span>
+            <span>Community modding field manual</span><span>GlitchScript · MT Custom Scripts · DLL</span>
           </footer>
         </div>
       </main>

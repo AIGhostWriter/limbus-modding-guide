@@ -32,7 +32,7 @@ export const docs: Record<string, DocPage> = {
     title: 'Source and version policy', kicker: 'START HERE',
     summary: 'Know which source answers which question, and what to do when documentation and your installed build disagree.',
     sections: [
-      { title: 'Primary sources', body: 'GlitchScript is the baseline syntax reference. MT’s Custom Scripts documents extensions and version history. Modular Examples demonstrates composition patterns. The official Lethe Guide defines encounter and JSON file relationships. LEAGUE OF NINE repositories are the implementation-level source of truth.' },
+      { title: 'Primary sources', body: 'GlitchScript is the baseline syntax reference. MT’s Custom Scripts documents extensions and version history. Modular Examples demonstrates composition patterns. The Lethe Guide defines encounter and JSON file relationships. LEAGUE OF NINE repositories provide implementation-level source material.' },
       { title: 'Version snapshot', body: 'The MT reference in this guide is organized around the v24.102.4 document snapshot. Function names, argument order, supported timings, and restrictions can change. Always compare the installed plugin version with the upstream changelog.', note: 'If runtime behavior and this guide differ, trust your installed assembly, its log output, and the matching upstream version.' },
       { title: 'Evidence order', body: 'Use documentation for intent, dumpedData for valid shapes, source or interop metadata for signatures, and runtime logs for actual behavior. Do not promote an assumption to a rule until it survives a minimal in-game test.' },
     ],
@@ -240,7 +240,7 @@ Modular/TIMING:WhenUse/dlactivatepath(1)` },
   ]
 }`, language: 'json' },
       { title: 'Part contract', body: 'The part ID must match the unit reference. Use explicit speed arrays and verify resistance semantics against a known dumped part.' },
-      { title: 'Known traps', body: 'Do not use 999 as a slot count. A starting buff with an invalid lifetime can silently fail. Unit HP and part HP should follow a deliberate scaling strategy.', note: 'For the official Yellow Harpoon example, the guide uses explicit slot counts and a starting-buff turn value of 99.' },
+      { title: 'Known traps', body: 'Do not use 999 as a slot count. A starting buff with an invalid lifetime can silently fail. Unit HP and part HP should follow a deliberate scaling strategy.', note: 'For the Yellow Harpoon example, the guide uses explicit slot counts and a starting-buff turn value of 99.' },
     ],
   },
   '/docs/content/patterns': {
@@ -322,7 +322,7 @@ Modular/TIMING:WhenUse/dlactivatepath(1)` },
     title: 'Localization', kicker: 'LETHE GUIDE',
     summary: 'Treat locale as part of the data graph: an ID is not complete until every player-facing name, description, and keyword resolves.',
     sections: [
-      { title: 'Directory contract', body: 'Place language files under custom_limbus_locale/<LANG>. Mirror the official list names such as personalityList, skillList, passiveList, bufList, and keywordList. Keep IDs identical to their data records.' },
+      { title: 'Directory contract', body: 'Place language files under custom_limbus_locale/<LANG>. Mirror the established list names such as personalityList, skillList, passiveList, bufList, and keywordList. Keep IDs identical to their data records.' },
       { title: 'Minimal skill locale', body: 'A skill normally needs a name and description. Keep description placeholders aligned with the runtime values supplied by the script.', code: `{
   "dataList": [{
     "id": 681001010,
