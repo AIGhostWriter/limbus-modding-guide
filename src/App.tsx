@@ -34,21 +34,25 @@ function Sidebar({ open, close }: { open: boolean; close: () => void }) {
 
 function Home() {
   const cards = [
-    ['01','GlitchScript','Learn timings, VALUE registers, conditions, selectors, and consequences.','/docs/glitch/structure'],
-    ['02','MT Extensions','Add persistent state, dynamic locale, advanced targets, and runtime control.','/docs/mt/overview'],
-    ['03','Lethe Content','Build identities, bosses, encounter stages, patterns, and custom buffs.','/docs/content/encounter'],
-    ['04','DLL Hub','Explore native battle, cinematic, map, story, and Mirror Dungeon extensions.','/docs/dll'],
+    ['01','Content Authoring','Original authoring documents for boss discovery, encounters, identities, skills, passives, buffs, patterns, locale, and complete working samples.','/docs/original/chapter-1'],
+    ['02','Script Reference','Searchable signatures for every recorded timing, acquirer, and consequence.','/docs/reference/functions'],
+    ['03','GlitchScript','GlitchScript-only syntax, execution rules, VALUE registers, conditions, loops, targeting, and callable entries.','/docs/reference/glitch'],
+    ['04','MT Custom Scripts','MT-only timings, functions, MTData, Dynamic Locale, Global Lua Data, and version-sensitive extensions.','/docs/reference/mt'],
+    ['05','Lethe Guide','The original five-part English guide preserved as complete documents without summarized replacement text.','/docs/original/chapter-1'],
+    ['06','DLL','Reserved for a clean rebuild of native plugin documentation from original project data.','/docs/dll'],
   ]
   return <div className="home">
     <section className="hero">
       <div className="hero-grid" /><div className="hero-glow" />
       <div className="hero-inner">
         <h1><span>Lethe</span><br />Guide</h1>
-        <p>A complete, searchable encyclopedia for Limbus Company data authoring, Modular scripting, encounters, assets, and native plugins.</p>
-        <div className="hero-actions"><Link className="button primary" to="/docs/overview">Start reading <span>→</span></Link><a className="button secondary" href="https://github.com/AIGhostWriter/limbus-modding-guide" target="_blank" rel="noreferrer">View on GitHub</a></div>
-        <div className="quick-code"><div className="code-top"><span><i /><i /><i /></span><b>skill abilityScriptList</b><em>MODULAR</em></div><pre><code><span className="c-dim">Modular/</span><span className="c-purple">TIMING</span>:<span className="c-blue">WhenUse</span><br /><span className="c-dim">/</span><span className="c-green">VALUE_0</span>:getsp(<span className="c-orange">Self</span>)<br /><span className="c-dim">/</span>CONTINUEIF(<span className="c-green">VALUE_0</span>&gt;29)<br /><span className="c-dim">/</span>buff(<span className="c-orange">Self</span>,Haste,2,0,1)</code></pre></div>
-        <div className="hero-stats"><div><b>150+</b><span>reference entries</span></div><div><b>35+</b><span>focused chapters</span></div><div><b>5</b><span>authoring layers</span></div></div>
+        <p>Six focused libraries for original Lethe authoring data, script references, GlitchScript, MT extensions, preserved guides, and future DLL documentation.</p>
+        <div className="hero-actions"><Link className="button primary" to="/docs/original/chapter-1">Open Content Authoring <span>→</span></Link><a className="button secondary" href="https://github.com/AIGhostWriter/limbus-modding-guide" target="_blank" rel="noreferrer">GitHub</a></div>
       </div>
+    </section>
+    <section className="home-section component-index">
+      <div className="section-title"><span>DOCUMENTATION LIBRARIES</span><h2>Choose a component</h2><p>Each library has one responsibility. Original source documents remain intact where source preservation is required.</p></div>
+      <div className="hub-grid">{cards.map(([n,title,desc,to]) => <Link to={to} className="hub-card" key={n}><span>{n}</span><div><h3>{title}</h3><p>{desc}</p></div><b>↗</b></Link>)}</div>
     </section>
     <section className="home-section references">
       <div className="section-title"><span>PRIMARY REFERENCES</span><h2>Source libraries behind the encyclopedia</h2><p>Open the original reference when you need to compare wording, version history, or upstream changes.</p></div>
@@ -59,15 +63,6 @@ function Home() {
         <a href="https://github.com/LEAGUE-OF-NINE" target="_blank" rel="noreferrer"><i>GH</i><b>LEAGUE OF NINE</b><span>Loaders, plugins, schemas and source</span></a>
         <a href="https://lethelc.site/dashboard" target="_blank" rel="noreferrer"><i>LC</i><b>Lethe Dashboard</b><span>Official ecosystem entry point</span></a>
       </div>
-    </section>
-    <section className="home-section">
-      <div className="section-title"><span>LEARNING PATH</span><h2>From one script to a complete encounter</h2><p>Each chapter gives you the concept, a complete example, the connection points, and a verification step.</p></div>
-      <div className="path-grid">{cards.map(([n,title,desc,to]) => <Link to={to} className="path-card" key={n}><div className="path-top"><b>{n}</b><span>GUIDE</span></div><h3>{title}</h3><p>{desc}</p><footer>Open chapter <span>→</span></footer></Link>)}</div>
-    </section>
-    <div className="divider" />
-    <section className="home-section split">
-      <div><span className="eyebrow">HOW THIS GUIDE WORKS</span><h2>Documentation that follows the actual data graph.</h2><p>Official Lethe-style chapters explain the complete record chain. Code-first examples show where each script belongs and what to check when it fails.</p><ul className="check-list"><li>Complete JSON and Modular examples</li><li>Field-level explanations and ID contracts</li><li>Version and timing restrictions</li><li>Minimal probes for reliable debugging</li></ul></div>
-      <div className="stack-card"><div><span>01</span><b>Load</b><small>Did Lethe read the file?</small></div><div><span>02</span><b>Connect</b><small>Do all referenced IDs resolve?</small></div><div><span>03</span><b>Trigger</b><small>Does the timing fire for this owner?</small></div><div><span>04</span><b>Execute</b><small>Does the consequence accept this target?</small></div></div>
     </section>
     <Footer />
   </div>
@@ -106,21 +101,7 @@ function DocsRoute() {
     '/docs/original/chapter-4': ['Chapter 4', () => import('./content/lethe-guide/chapter4.md?raw').then(m=>m.default)],
     '/docs/original/identity': ['Custom Identity Guide', () => import('./content/lethe-guide/identity.md?raw').then(m=>m.default)],
   }
-  const dllDocuments: Record<string, [string, () => Promise<string>]> = {
-    '/docs/dll/animated-map-support': ['AnimatedMapSupport', () => import('./content/dll/animated-map.md?raw').then(m=>m.default)],
-    '/docs/dll/gif-map-support': ['GifMapSupport', () => import('./content/dll/gif-map.md?raw').then(m=>m.default)],
-    '/docs/dll/battle-cinematic-player': ['BattleCinematicPlayer', () => Promise.all([import('./content/dll/cinematic-readme.md?raw'),import('./content/dll/cinematic-native.md?raw'),import('./content/dll/cinematic-research.md?raw')]).then(ms=>ms.map(m=>m.default).join('\n\n---\n\n'))],
-    '/docs/dll/battle-message': ['BattleMessage', () => import('./content/dll/battle-message.md?raw').then(m=>m.default)],
-    '/docs/dll/fire-field-forcer': ['FireFieldForcer / AlphaStrike', () => Promise.all([import('./content/dll/fire-field.md?raw'),import('./content/dll/alpha-strike.md?raw')]).then(ms=>ms.map(m=>m.default).join('\n\n---\n\n'))],
-    '/docs/dll/skill-interrupter': ['SkillInterrupter', () => import('./content/dll/skill-interrupter.md?raw').then(m=>m.default)],
-    '/docs/dll/gwangyeoknansa': ['GwangYeokNansa', () => import('./content/dll/gwang.md?raw').then(m=>m.default)],
-    '/docs/dll/lyrics-override': ['LyricsOverride', () => import('./content/dll/lyrics.md?raw').then(m=>m.default)],
-    '/docs/dll/story-script-loader': ['StoryScriptLoader', () => import('./content/dll/story-loader.md?raw').then(m=>m.default)],
-    '/docs/dll/md-offline': ['MDOffline', () => Promise.all([import('./content/dll/md-plan.md?raw'),import('./content/dll/md-encounter.md?raw')]).then(ms=>ms.map(m=>m.default).join('\n\n---\n\n'))],
-    '/docs/dll/motions': ['Motions', () => import('./content/dll/motions.md?raw').then(m=>m.default)],
-  }
   if (originals[location.pathname]) return <AsyncMarkdownDocument label={originals[location.pathname][0]} loader={originals[location.pathname][1]} />
-  if (dllDocuments[location.pathname]) return <AsyncMarkdownDocument collection="DLL" label={dllDocuments[location.pathname][0]} loader={dllDocuments[location.pathname][1]} />
   if (location.pathname === '/docs/reference/glitch') return <FunctionCatalog key="glitch" lockedSource="glitch" title="GlitchScript catalog" />
   if (location.pathname === '/docs/reference/mt') return <FunctionCatalog key="mt" lockedSource="mt" title="MT Custom Scripts catalog" />
   if (location.pathname === '/docs/reference/functions') return <FunctionCatalog key="all" title="Complete function catalog" />

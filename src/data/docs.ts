@@ -2,14 +2,12 @@ export type DocSection = { title: string; body: string; code?: string; language?
 export type DocPage = { title: string; kicker: string; summary: string; sections: DocSection[] }
 
 export const navGroups: { label: string; items: [string, string][] }[] = [
-  { label: 'SCRIPT REFERENCE', items: [['GlitchScript catalog','/docs/reference/glitch'],['MT Custom Scripts catalog','/docs/reference/mt'],['All functions','/docs/reference/functions']] },
-  { label: 'START HERE', items: [['Overview','/docs/overview'],['Installation & data dump','/docs/install'],['Source & version policy','/docs/sources'],['Mod folder structure','/docs/file-structure'],['Your first script','/docs/first-script']] },
-  { label: 'GLITCHSCRIPT', items: [['GlitchScript functions','/docs/reference/glitch'],['Execution model','/docs/glitch/structure'],['VALUE registers','/docs/glitch/values'],['Conditions & loops','/docs/glitch/conditions'],['Target selectors','/docs/glitch/targeting'],['Basic recipes','/docs/recipes/basic'],['Intermediate recipes','/docs/recipes/intermediate'],['Advanced recipes','/docs/recipes/advanced']] },
-  { label: 'MT CUSTOM SCRIPTS', items: [['MT functions & timings','/docs/reference/mt'],['MT extensions','/docs/mt/overview'],['MTData','/docs/mt/data'],['Dynamic Locale','/docs/mt/locale'],['Global Lua Data','/docs/mt/lua'],['Reload requirements','/docs/reference/reload']] },
-  { label: 'CONTENT AUTHORING', items: [['Identity skills','/docs/content/skills'],['Passives','/docs/content/passives'],['E.G.O. integration','/docs/content/ego'],['Localization','/docs/content/locale'],['Boss unit & part','/docs/content/boss'],['Pattern design','/docs/content/patterns'],['Encounter stage','/docs/content/encounter'],['Custom buffs','/docs/content/buffs'],['Maps & stories','/docs/content/maps-stories'],['Motions, VFX & SFX','/docs/content/motions']] },
-  { label: 'ORIGINAL LETHE GUIDE', items: [['01 · Finding boss data','/docs/original/chapter-1'],['02 · Creating an encounter','/docs/original/chapter-2'],['03 · Advanced Lua','/docs/original/chapter-3'],['04 · Soji Abi boss','/docs/original/chapter-4'],['Custom Identity guide','/docs/original/identity']] },
-  { label: 'DLL', items: [['DLL index','/docs/dll'],['AnimatedMapSupport','/docs/dll/animated-map-support'],['GifMapSupport','/docs/dll/gif-map-support'],['BattleCinematicPlayer','/docs/dll/battle-cinematic-player'],['BattleMessage','/docs/dll/battle-message'],['FireFieldForcer / AlphaStrike','/docs/dll/fire-field-forcer'],['SkillInterrupter','/docs/dll/skill-interrupter'],['GwangYeokNansa','/docs/dll/gwangyeoknansa'],['LyricsOverride','/docs/dll/lyrics-override'],['StoryScriptLoader','/docs/dll/story-script-loader'],['MDOffline','/docs/dll/md-offline'],['Motions','/docs/dll/motions'],['Build & deployment','/docs/dll/build']] },
-  { label: 'REFERENCE', items: [['All function catalog','/docs/reference/functions'],['Reload matrix','/docs/reference/reload'],['Troubleshooting','/docs/reference/troubleshooting']] },
+  { label: 'CONTENT AUTHORING', items: [['Boss data discovery · Original','/docs/original/chapter-1'],['Encounter authoring · Original','/docs/original/chapter-2'],['Advanced Lua · Original','/docs/original/chapter-3'],['Complete boss sample · Original','/docs/original/chapter-4'],['Custom Identity · Original','/docs/original/identity']] },
+  { label: 'SCRIPT REFERENCE', items: [['All functions','/docs/reference/functions'],['Reload matrix','/docs/reference/reload'],['Troubleshooting','/docs/reference/troubleshooting']] },
+  { label: 'GLITCHSCRIPT', items: [['GlitchScript catalog','/docs/reference/glitch'],['Execution model','/docs/glitch/structure'],['VALUE registers','/docs/glitch/values'],['Conditions & loops','/docs/glitch/conditions'],['Target selectors','/docs/glitch/targeting']] },
+  { label: 'MT CUSTOM SCRIPTS', items: [['MT catalog','/docs/reference/mt'],['MT extensions','/docs/mt/overview'],['MTData','/docs/mt/data'],['Dynamic Locale','/docs/mt/locale'],['Global Lua Data','/docs/mt/lua']] },
+  { label: 'LETHE GUIDE', items: [['Chapter 1 · Boss data','/docs/original/chapter-1'],['Chapter 2 · Encounter','/docs/original/chapter-2'],['Chapter 3 · Lua','/docs/original/chapter-3'],['Chapter 4 · Soji Abi','/docs/original/chapter-4'],['Custom Identity','/docs/original/identity']] },
+  { label: 'DLL', items: [['DLL','/docs/dll']] },
 ]
 
 export const docs: Record<string, DocPage> = {
@@ -382,13 +380,9 @@ Modular/TIMING:WhenUse/dlactivatepath(1)` },
     ],
   },
   '/docs/dll': {
-    title: 'DLL plugin hub', kicker: 'DLL HUB',
-    summary: 'A catalog of native extensions found in the local development workspace, separated by purpose and documented by runtime responsibility.',
-    sections: [
-      { title: 'Use a DLL last', body: 'Choose a DLL when JSON, Modular scripts, MT extensions, and Lua cannot access the required engine lifecycle or presentation API. Native patches carry game-version and mod-conflict risk.' },
-      { title: 'Documentation standard', body: 'Every plugin page records purpose, visible result, requirements, configuration, patch targets, runtime flow, build path, verification logs, conflicts, limitations, and rollback.' },
-      { title: 'Stability labels', body: 'Stable means a repeatable user workflow exists. Development means the main path works but coverage is incomplete. Research means the documents describe investigation or observed call flow rather than a supported release.' },
-    ],
+    title: 'DLL', kicker: 'DLL',
+    summary: 'DLL documentation has been cleared and will be rebuilt from the original project data.',
+    sections: [],
   },
   '/docs/dll/battle': {
     title: 'Battle and skill plugins', kicker: 'DLL HUB',
