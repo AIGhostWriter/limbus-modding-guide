@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { HashRouter, Link, NavLink, Route, Routes, useLocation } from 'react-router-dom'
 import { docs, navGroups } from './data/docs'
 import type { DocPage } from './data/docs'
@@ -6,11 +6,6 @@ import { functions } from './data/functions'
 import { extendedFunctions } from './data/extendedFunctions'
 import { functionDescriptions } from './data/functionDescriptions'
 import MarkdownDocument from './components/MarkdownDocument'
-import chapter1 from './content/lethe-guide/chapter1.md?raw'
-import chapter2 from './content/lethe-guide/chapter2.md?raw'
-import chapter3 from './content/lethe-guide/chapter3.md?raw'
-import chapter4 from './content/lethe-guide/chapter4.md?raw'
-import identityGuide from './content/lethe-guide/identity.md?raw'
 
 function Brand() {
   return <Link to="/" className="brand"><span className="brand-mark">L</span><span><b>LETHE LAB</b><small>MODDING DOCUMENTATION</small></span></Link>
@@ -104,15 +99,37 @@ function Article({ page }: { page: DocPage }) {
 
 function DocsRoute() {
   const location = useLocation()
-  const originals: Record<string, [string, string]> = {
-    '/docs/original/chapter-1': ['Chapter 1', chapter1], '/docs/original/chapter-2': ['Chapter 2', chapter2],
-    '/docs/original/chapter-3': ['Chapter 3', chapter3], '/docs/original/chapter-4': ['Chapter 4', chapter4],
-    '/docs/original/identity': ['Custom Identity Guide', identityGuide],
+  const originals: Record<string, [string, () => Promise<string>]> = {
+    '/docs/original/chapter-1': ['Chapter 1', () => import('./content/lethe-guide/chapter1.md?raw').then(m=>m.default)],
+    '/docs/original/chapter-2': ['Chapter 2', () => import('./content/lethe-guide/chapter2.md?raw').then(m=>m.default)],
+    '/docs/original/chapter-3': ['Chapter 3', () => import('./content/lethe-guide/chapter3.md?raw').then(m=>m.default)],
+    '/docs/original/chapter-4': ['Chapter 4', () => import('./content/lethe-guide/chapter4.md?raw').then(m=>m.default)],
+    '/docs/original/identity': ['Custom Identity Guide', () => import('./content/lethe-guide/identity.md?raw').then(m=>m.default)],
   }
-  if (originals[location.pathname]) return <MarkdownDocument label={originals[location.pathname][0]} source={originals[location.pathname][1]} />
+  const dllDocuments: Record<string, [string, () => Promise<string>]> = {
+    '/docs/dll/animated-map-support': ['AnimatedMapSupport', () => import('./content/dll/animated-map.md?raw').then(m=>m.default)],
+    '/docs/dll/gif-map-support': ['GifMapSupport', () => import('./content/dll/gif-map.md?raw').then(m=>m.default)],
+    '/docs/dll/battle-cinematic-player': ['BattleCinematicPlayer', () => Promise.all([import('./content/dll/cinematic-readme.md?raw'),import('./content/dll/cinematic-native.md?raw'),import('./content/dll/cinematic-research.md?raw')]).then(ms=>ms.map(m=>m.default).join('\n\n---\n\n'))],
+    '/docs/dll/battle-message': ['BattleMessage', () => import('./content/dll/battle-message.md?raw').then(m=>m.default)],
+    '/docs/dll/fire-field-forcer': ['FireFieldForcer / AlphaStrike', () => Promise.all([import('./content/dll/fire-field.md?raw'),import('./content/dll/alpha-strike.md?raw')]).then(ms=>ms.map(m=>m.default).join('\n\n---\n\n'))],
+    '/docs/dll/skill-interrupter': ['SkillInterrupter', () => import('./content/dll/skill-interrupter.md?raw').then(m=>m.default)],
+    '/docs/dll/gwangyeoknansa': ['GwangYeokNansa', () => import('./content/dll/gwang.md?raw').then(m=>m.default)],
+    '/docs/dll/lyrics-override': ['LyricsOverride', () => import('./content/dll/lyrics.md?raw').then(m=>m.default)],
+    '/docs/dll/story-script-loader': ['StoryScriptLoader', () => import('./content/dll/story-loader.md?raw').then(m=>m.default)],
+    '/docs/dll/md-offline': ['MDOffline', () => Promise.all([import('./content/dll/md-plan.md?raw'),import('./content/dll/md-encounter.md?raw')]).then(ms=>ms.map(m=>m.default).join('\n\n---\n\n'))],
+    '/docs/dll/motions': ['Motions', () => import('./content/dll/motions.md?raw').then(m=>m.default)],
+  }
+  if (originals[location.pathname]) return <AsyncMarkdownDocument label={originals[location.pathname][0]} loader={originals[location.pathname][1]} />
+  if (dllDocuments[location.pathname]) return <AsyncMarkdownDocument collection="DLL" label={dllDocuments[location.pathname][0]} loader={dllDocuments[location.pathname][1]} />
   if (location.pathname === '/docs/reference/functions') return <FunctionCatalog />
   const page = docs[location.pathname] ?? docs['/docs/overview']
   return <Article page={page} />
+}
+
+function AsyncMarkdownDocument({ label, loader, collection }: { label:string; loader:()=>Promise<string>; collection?:string }) {
+  const [source,setSource] = useState('')
+  useEffect(() => { let active=true; loader().then(value=>{if(active)setSource(value)}); return()=>{active=false} }, [loader])
+  return source ? <MarkdownDocument label={label} source={source} collection={collection} /> : <div className="article-wrap"><article className="article"><p>Loading document…</p></article></div>
 }
 
 function FunctionCatalog() {

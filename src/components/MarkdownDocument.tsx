@@ -1,6 +1,6 @@
 import { Fragment } from 'react'
 
-type Props = { source: string; label: string }
+type Props = { source: string; label: string; collection?: string }
 
 const inline = (value: string) => {
   const parts = value.split(/(`[^`]+`|\*\*[^*]+\*\*|\[[^\]]+\]\([^)]+\))/g)
@@ -13,7 +13,7 @@ const inline = (value: string) => {
   })
 }
 
-export default function MarkdownDocument({ source, label }: Props) {
+export default function MarkdownDocument({ source, label, collection = 'Original Lethe Guide' }: Props) {
   const lines = source.replace(/\r/g, '').split('\n')
   const nodes: React.ReactNode[] = []
   let i = 0
@@ -43,5 +43,5 @@ export default function MarkdownDocument({ source, label }: Props) {
     if (line.trim()) { const paragraph=[line]; i++; while(i<lines.length && lines[i].trim() && !/^(#{1,4})\s|^```|^[-*]\s+|^\d+\.\s+|^>/.test(lines[i])) paragraph.push(lines[i++]); nodes.push(<p key={`p-${i}`}>{inline(paragraph.join(' '))}</p>); continue }
     i++
   }
-  return <div className="article-wrap"><article className="article legacy-doc"><div className="breadcrumbs"><span>Original Lethe Guide</span><span>/</span><span>{label}</span></div>{nodes}</article></div>
+  return <div className="article-wrap"><article className="article legacy-doc"><div className="breadcrumbs"><span>{collection}</span><span>/</span><span>{label}</span></div>{nodes}</article></div>
 }
