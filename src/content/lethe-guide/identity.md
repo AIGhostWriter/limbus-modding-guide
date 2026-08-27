@@ -196,8 +196,8 @@ Encounter mods use `appearance` in `abnormality-unit`. The exact same string for
 ```json
 {
   "6821000": {
-    "name": "소지 아비",
-    "desc": "거미 집의 새끼손가락 아비",
+    "name": "Soji Abi",
+    "desc": "Father of the Spider House's Little Finger",
     "summary": "",
     "flavor": ""
   }
@@ -322,7 +322,7 @@ Every coin a player can flip must have these three fields:
 > The coin will always count as heads and never animate.
 > This was the cause of all broken encounter-ported skills — encounter skills omit these fields because encounters never flip.
 
-**Example — Skill 1 (이연잔), 5 flip coins:**
+**Example — Skill 1 (Flowing Blade), 5 flip coins:**
 
 ```json
 "coinList": [
@@ -344,7 +344,7 @@ Every coin a player can flip must have these three fields:
 
 ## 2.4 SuperCoin in Player Skills
 
-SuperCoins are coins that are always heads and deal high damage. They are used in the 9-coin barrage skill (광역난사) to simulate a full-auto burst.
+SuperCoins are coins that are always heads and deal high damage. They are used in the 9-coin Area Barrage skill to simulate a full-auto burst.
 
 ```json
 {
@@ -380,7 +380,7 @@ The final coin in the barrage is the finisher and uses `color: "GREY", grade: 2`
 }
 ```
 
-**Full 9-coin barrage structure for 광역난사 (Skill 2):**
+**Full 9-coin structure for Area Barrage (Skill 2):**
 
 ```json
 {
@@ -506,7 +506,7 @@ Common skill-level scripts:
 |--------|--------|
 | `EmptyBody` | Required placeholder. Always include as first entry |
 | `GiveBuffOnUse` | Gives a buff once when skill activates |
-| `ReuseOnKillOrBreakTargetToRandomTarget` | Re-triggers the skill on kill (필연쇄 mechanic) |
+| `ReuseOnKillOrBreakTargetToRandomTarget` | Re-triggers the skill on kill (Inevitable Chain mechanic) |
 | `Modular/TIMING:BeforeUse/makeunbreakable(1)` | Prevents clash interruption (barrage skills) |
 
 Common coin-level scripts:
@@ -546,23 +546,23 @@ Common coin-level scripts:
 ```json
 {
   "6821010": {
-    "name": "이연잔",
-    "desc": "코인 적중 시 호흡 횟수 +1",
+    "name": "Flowing Blade",
+    "desc": "On coin hit, gain 1 Breath Count",
     "summary": ""
   },
   "6821020": {
-    "name": "광역난사",
-    "desc": "9코인 연속 공격. 적중 시 진동 5 부여 및 진동 폭발.",
+    "name": "Area Barrage",
+    "desc": "A nine-coin consecutive attack. On hit, inflict 5 Vibration and trigger Vibration Burst.",
     "summary": ""
   },
   "6821030": {
-    "name": "필연쇄",
-    "desc": "적중 시 진동 + 잔상베기 부여. 처치 시 재발동.",
+    "name": "Inevitable Chain",
+    "desc": "On hit, inflict Vibration and Phantom Incision. Reuse on kill.",
     "summary": ""
   },
   "6821100": {
-    "name": "방어",
-    "desc": "코인 성공 시 호흡 횟수 +1~2",
+    "name": "Defense",
+    "desc": "On coin success, gain 1–2 Breath Count",
     "summary": ""
   }
 }
@@ -628,12 +628,12 @@ For SojiAbiIdentity, the encounter's passive set (`soji.json → passiveSet.pass
 
 | ID | Name | Effect |
 |----|------|--------|
-| `132219` | 천살성상[天殺星傷] | Combat start: TimeEntangleUnstable +4 |
-| `132220` | (LittleFingerBoss_Shin source) | Grants 신(心)-지혜성 |
-| `132222` | 새벽에서 황혼까지 | SP ≥ 0 → SojiAbiAgeFuture; SP < 0 → SojiAbiAgePast |
-| `132223` | 시공간 잔상 분열 | SP delta each turn → adjusts TimeEntangleUnstable |
-| `132214` | 미래 잔상 | Periodic forced skill mechanic |
-| `132230` | 패닉 회복 | On panic end, restore SP to 30 |
+| `132219` | Celestial Killing Star Wound | Combat start: TimeEntangleUnstable +4 |
+| `132220` | Little Finger Boss Shin source | Grants Mind–Wisdom Star |
+| `132222` | From Dawn to Dusk | SP ≥ 0 → SojiAbiAgeFuture; SP < 0 → SojiAbiAgePast |
+| `132223` | Spacetime Afterimage Split | SP delta each turn → adjusts TimeEntangleUnstable |
+| `132214` | Future Afterimage | Periodic forced skill mechanic |
+| `132230` | Panic Recovery | On panic end, restore SP to 30 |
 
 > ⚠️ **Some base-game enemy passives reference boss-only buffs.**
 > `132219` also grants `LvDownLittleFingerBossTwo` — a debuff that exists only in the boss context and will do nothing on a player (not a crash, just ignored).
@@ -719,14 +719,14 @@ Modular/TIMING:<timing>/LUA:<lua_filename>/LUAMAIN:<function_name>
 
 ```lua
 -- SojiIDPassive.lua
--- 소지 아비 정체성 보조 패시브 (6821901)
--- 트리거: Modular/TIMING:AfterSlots/LUA:SojiIDPassive/LUAMAIN:onSojiPassive
+-- Soji Abi identity support passive (6821901)
+-- Trigger: Modular/TIMING:AfterSlots/LUA:SojiIDPassive/LUAMAIN:onSojiPassive
 
 function onSojiPassive()
     local r = round()
 
     if r == 1 then
-        -- 전투 시작 시 신(心)-지혜성 최대치 보장 (base-game passive 132220 보완)
+        -- Ensure maximum Mind-Wisdom Star at encounter start (supplements base-game passive 132220)
         local shinStack = bufcheck("Self", "LittleFingerBoss_Shin", "stack") or 0
         if shinStack < 3 then
             buff("Self", "LittleFingerBoss_Shin", 3 - shinStack, 99, 0)
@@ -801,16 +801,16 @@ In `pp.json`:
   "6821901": {
     "a": 0,
     "id": "6821901",
-    "name": "천살성상[天殺星傷]",
-    "desc": "전투 시작 시, [폭주 - 잔상 얽힘] 4, [신(心) - 지혜성] 3 얻음\n매 라운드 시작 시, [순행 - 연민] 2 얻음 (최대 20)",
-    "summary": "전투 시작 시 폭주-잔상 얽힘 4 + 신(心)-지혜성 3"
+    "name": "Celestial Killing Star Wound",
+    "desc": "At encounter start, gain 4 [Rampage - Entangled Afterimage] and 3 [Mind - Wisdom Star].\nAt the start of each round, gain 2 [Forward Flow - Compassion] (maximum 20).",
+    "summary": "At encounter start: 4 Rampage-Entangled Afterimage + 3 Mind-Wisdom Star"
   },
   "6821921": {
     "a": 0,
     "id": "6821921",
-    "name": "천살성상[天殺星傷]",
-    "desc": "전투 시작 시, [폭주 - 잔상 얽힘] 4, [신(心) - 지혜성] 3 얻음\n매 라운드 시작 시, [순행 - 연민] 2 얻음 (최대 20)",
-    "summary": "전투 시작 시 폭주-잔상 얽힘 4 + 신(心)-지혜성 3"
+    "name": "Celestial Killing Star Wound",
+    "desc": "At encounter start, gain 4 [Rampage - Entangled Afterimage] and 3 [Mind - Wisdom Star].\nAt the start of each round, gain 2 [Forward Flow - Compassion] (maximum 20).",
+    "summary": "At encounter start: 4 Rampage-Entangled Afterimage + 3 Mind-Wisdom Star"
   }
 }
 ```
@@ -830,15 +830,15 @@ When using base-game buffs in Lua or skill scripts, use the internal buff keywor
 
 | Buff keyword | Display name | Effect summary |
 |--------------|-------------|----------------|
-| `Breath` | 호흡 | Stacking count buff; consumed by certain skill effects |
-| `Vibration` | 진동 | Stacking potency buff; detonated by VibrationExplosion |
-| `PhantomIncision` | 잔상베기 | Stacking damage count buff |
-| `TimeEntangleUnstable` | 폭주 - 잔상 얽힘 | On-hit: slash damage × stack count; 2+ burn, 3+ bleed, 4+ bind, 5+ poison |
-| `LittleFingerBoss_Shin` | 신(心) - 지혜성 | Turn start: Breath power +5 and count +1 per stack; lost HP 15% → slash dmg +1 |
-| `SojiAbiAgeFuture` | 순행 - 연민 | Per stack: dealt dmg −2%, received dmg −2% (max 20 stacks) |
-| `SojiAbiAgePast` | 역행 - 미움 | Per stack: dealt dmg +2%, received dmg +2% (max 20 stacks) |
-| `Haste` | 신속 | Speed +1 per stack |
-| `OffenseLevelBuff` | 공격 레벨 증가 | Offense level +1 per stack |
+| `Breath` | Breath | Stacking count buff; consumed by certain skill effects |
+| `Vibration` | Vibration | Stacking potency buff; detonated by VibrationExplosion |
+| `PhantomIncision` | Phantom Incision | Stacking damage count buff |
+| `TimeEntangleUnstable` | Rampage - Entangled Afterimage | On-hit: slash damage × stack count; 2+ burn, 3+ bleed, 4+ bind, 5+ poison |
+| `LittleFingerBoss_Shin` | Mind - Wisdom Star | Turn start: Breath power +5 and count +1 per stack; lost HP 15% → slash dmg +1 |
+| `SojiAbiAgeFuture` | Forward Flow - Compassion | Per stack: dealt dmg −2%, received dmg −2% (max 20 stacks) |
+| `SojiAbiAgePast` | Reverse Flow - Hatred | Per stack: dealt dmg +2%, received dmg +2% (max 20 stacks) |
+| `Haste` | Haste | Speed +1 per stack |
+| `OffenseLevelBuff` | Offense Level Up | Offense level +1 per stack |
 
 ---
 

@@ -1,8 +1,8 @@
-# Chapter 4 — Sample Boss: Soji Abi (소지아비)
+# Chapter 4 — Sample Boss: Soji Abi
 
 This chapter is a complete, end-to-end walkthrough of building a custom boss encounter from scratch. Every design decision, file, error, and fix is documented exactly as it happened during development. Use it as a living reference when building your own encounter.
 
-> **Running example:** The boss we are building is **Soji Abi (소지아비)** — a breath-and-afterimage swordsman encounter with 15 skills, a 9-coin area barrage, and a full Korean locale.
+> **Running example:** The boss we are building is **Soji Abi** — a breath-and-afterimage swordsman encounter with 15 skills, a 9-coin area barrage, and a complete English locale.
 
 ---
 
@@ -29,7 +29,7 @@ Before touching any JSON, decide what the boss *does*. A well-defined concept pr
 
 | Field | Value |
 |---|---|
-| Name | 소지아비 (Soji Abi) |
+| Name | Soji Abi |
 | Unit ID | `6820001` |
 | Role | Aggressive sword fighter |
 | Appearance | Existing LeiHeng rig |
@@ -41,14 +41,14 @@ Two custom keywords drive the entire kit:
 
 | Keyword | Type | Description |
 |---|---|---|
-| `Breath` (호흡) | Stacking buff on Self | The boss's power resource. Accumulates from every skill, empowers later skills. |
-| `PhantomIncision` (잔상) | Stacking debuff on Target | Applied by Afterimage skills. Interacts with follow-up skills. |
+| `Breath` | Stacking buff on Self | The boss's power resource. Accumulates from every skill, empowers later skills. |
+| `PhantomIncision` | Stacking debuff on Target | Applied by Afterimage skills. Interacts with follow-up skills. |
 
 A third keyword is used on the climactic skill:
 
 | Keyword | Type | Description |
 |---|---|---|
-| `Vibration` (진동) | Stacking debuff on Target | Applied every hit of the final 9-coin barrage. Triggers `VibrationExplosion` on each coin. |
+| `Vibration` | Stacking debuff on Target | Applied every hit of the final 9-coin barrage. Triggers `VibrationExplosion` on each coin. |
 
 ### 1.3 Skill Budget
 
@@ -56,12 +56,12 @@ A third keyword is used on the climactic skill:
 
 | Role | Skills | IDs |
 |---|---|---|
-| Breath builders (basic) | 연격, 이연잔 | 682001010, 682001020 |
-| Afterimage openers | 잔상베기, 잔상 해방 | 682001030, 682001060 |
-| Heavy/special attacks | 폭압격, 사냥, 처형, 공진 | 682001040, 682001080, 682001100, 682001110 |
-| Combo chains | 이연속참, 필연쇄 | 682001130, 682001140 |
-| Debuff/utility | 호흡 강탈, 정신 압박, 취약 유도, 취약 강타 | 682001160–682001190 |
-| Climax (9-coin barrage) | 광역 난사 | 682001200 |
+| Breath builders (basic) | Consecutive Strike, Flowing Blade | 682001010, 682001020 |
+| Afterimage openers | Afterimage Slash, Afterimage Release | 682001030, 682001060 |
+| Heavy/special attacks | Crushing Blow, Hunt, Execution, Resonance | 682001040, 682001080, 682001100, 682001110 |
+| Combo chains | Dual Continuous Slash, Inevitable Chain | 682001130, 682001140 |
+| Debuff/utility | Breath Steal, Mental Pressure, Weakness Induction, Weakness Strike | 682001160–682001190 |
+| Climax (9-coin barrage) | Area Barrage | 682001200 |
 
 > **ID range:** The boss unit lives at `6820001` and skills at `682001010–682001200`. This keeps everything in the `682XXXXX` block, far from base-game IDs and other mods. See the [Appendix of Chapter 2](chapter2_EN.md#appendix-recommended-id-scheme) for safe ID ranges.
 
@@ -73,7 +73,7 @@ The finished mod sits in a single self-contained folder:
 
 ```
 mods/
-└── 소지아비로/
+└── soji_abi/
     ├── custom_encounters/
     │   └── encounter.json
     ├── custom_limbus_data/
@@ -236,25 +236,25 @@ All skills live in `custom_limbus_data/skill/soji_skills.json` as a single `list
 
 | ID | Name (KR) | Name (EN) | Coins | Special |
 |---|---|---|---|---|
-| 682001010 | 연격 | Consecutive Strike | 4 | Breath ×1 per hit |
-| 682001020 | 이연잔 | Flowing Blade | 4 | Breath ×1 per hit |
-| 682001030 | 잔상베기 | Afterimage Slash | 3 | Breath + PhantomIncision, SuperCoin on coin 3 |
-| 682001040 | 폭압격 | Crushing Blow | 4 | CRIMSON heavy strike |
-| 682001060 | 잔상 해방 | Afterimage Release | 4 | PhantomIncision burst |
-| 682001080 | 사냥 | Hunt | 4 | — |
-| 682001100 | 처형 | Execution | 4 | — |
-| 682001110 | 공진 | Resonance | 4 | — |
-| 682001130 | 이연속참 | Dual Continuous Slash | 4 | — |
-| 682001140 | 필연쇄 | Inevitable Chain | 4 | — |
-| 682001160 | 호흡 강탈 | Breath Steal | 4 | — |
-| 682001170 | 정신 압박 | Mental Pressure | 4 | — |
-| 682001180 | 취약 유도 | Weakness Induction | 4 | — |
-| 682001190 | 취약 강타 | Weakness Strike | 4 | — |
-| 682001200 | 광역 난사 | Area Barrage | **9** | VibrationExplosion + Vibration 5/5 on **all** coins |
+| 682001010 | Consecutive Strike | Consecutive Strike | 4 | Breath ×1 per hit |
+| 682001020 | Flowing Blade | Flowing Blade | 4 | Breath ×1 per hit |
+| 682001030 | Afterimage Slash | Afterimage Slash | 3 | Breath + PhantomIncision, SuperCoin on coin 3 |
+| 682001040 | Crushing Blow | Crushing Blow | 4 | CRIMSON heavy strike |
+| 682001060 | Afterimage Release | Afterimage Release | 4 | PhantomIncision burst |
+| 682001080 | Hunt | Hunt | 4 | — |
+| 682001100 | Execution | Execution | 4 | — |
+| 682001110 | Resonance | Resonance | 4 | — |
+| 682001130 | Dual Continuous Slash | Dual Continuous Slash | 4 | — |
+| 682001140 | Inevitable Chain | Inevitable Chain | 4 | — |
+| 682001160 | Breath Steal | Breath Steal | 4 | — |
+| 682001170 | Mental Pressure | Mental Pressure | 4 | — |
+| 682001180 | Weakness Induction | Weakness Induction | 4 | — |
+| 682001190 | Weakness Strike | Weakness Strike | 4 | — |
+| 682001200 | Area Barrage | Area Barrage | **9** | VibrationExplosion + Vibration 5/5 on **all** coins |
 
 ### 5.2 Skill Template — 4-Coin Basic Attack
 
-Below is the pattern used for most skills (shown with 연격 / Consecutive Strike):
+Below is the pattern used for most skills (shown with Consecutive Strike):
 
 ```json
 {
@@ -331,7 +331,7 @@ This fires before the attack sequence, so the boss enters the clash already powe
 
 ### 5.4 SuperCoin — The Unflippable Final Coin
 
-The third coin of 잔상베기 (Afterimage Slash) can never be tails. It also deals bonus critical damage:
+The third coin of Afterimage Slash can never be tails. It also deals bonus critical damage:
 
 ```json
 {
@@ -385,7 +385,7 @@ The key is the **unit ID as a string**.
   "6820001": {
     "a": 0,
     "id": "6820001",
-    "name": "소지 아비",
+    "name": "Soji Abi",
     "desc": ""
   }
 }
@@ -402,18 +402,18 @@ Each skill ID maps to a `levelList` array. Each level contains a `coinlist` arra
     "levelList": [
       {
         "level": 1,
-        "name": "연격",
-        "desc": "대상을 연속으로 베어 호흡을 쌓는다.",
+        "name": "Consecutive Strike",
+        "desc": "Slash the target repeatedly to build Breath.",
         "flavor": "",
         "rawDesc": "",
         "abName": "",
         "coinlist": [
           {
             "coindescs": [
-              { "desc": "[적중시] 호흡 1 획득", "summary": "" },
-              { "desc": "[적중시] 호흡 1 획득", "summary": "" },
-              { "desc": "[적중시] 호흡 1 획득", "summary": "" },
-              { "desc": "[적중시] 호흡 1 획득", "summary": "" }
+              { "desc": "[On Hit] Gain 1 Breath", "summary": "" },
+              { "desc": "[On Hit] Gain 1 Breath", "summary": "" },
+              { "desc": "[On Hit] Gain 1 Breath", "summary": "" },
+              { "desc": "[On Hit] Gain 1 Breath", "summary": "" }
             ]
           }
         ]
@@ -425,7 +425,7 @@ Each skill ID maps to a `levelList` array. Each level contains a `coinlist` arra
 
 > **Coin count mismatch warning:** If `coindescs` has a different number of entries than the actual `coinList` in your skill JSON, the in-game tooltip will display incorrectly or crash the UI. Always count your coins before writing locale.
 
-### 6.3 Locale for the 9-Coin Barrage (광역 난사)
+### 6.3 Locale for the 9-Coin Area Barrage
 
 All 9 coins share the same Vibration Explosion effect. Coin 9 additionally grants Breath, so it gets its own description:
 
@@ -435,23 +435,23 @@ All 9 coins share the same Vibration Explosion effect. Coin 9 additionally grant
   "levelList": [
     {
       "level": 1,
-      "name": "광역 난사",
-      "desc": "광역으로 칼을 난사한다. 모든 적중마다 진동 폭발.",
+      "name": "Area Barrage",
+      "desc": "Unleash a wide-area blade barrage. Trigger Vibration Burst on every hit.",
       "flavor": "",
       "rawDesc": "",
       "abName": "",
       "coinlist": [
         {
           "coindescs": [
-            { "desc": "[파괴불가] [진동 폭발] [적중시] 진동 5/5턴 부여", "summary": "" },
-            { "desc": "[파괴불가] [진동 폭발] [적중시] 진동 5/5턴 부여", "summary": "" },
-            { "desc": "[파괴불가] [진동 폭발] [적중시] 진동 5/5턴 부여", "summary": "" },
-            { "desc": "[파괴불가] [진동 폭발] [적중시] 진동 5/5턴 부여", "summary": "" },
-            { "desc": "[파괴불가] [진동 폭발] [적중시] 진동 5/5턴 부여", "summary": "" },
-            { "desc": "[파괴불가] [진동 폭발] [적중시] 진동 5/5턴 부여", "summary": "" },
-            { "desc": "[파괴불가] [진동 폭발] [적중시] 진동 5/5턴 부여", "summary": "" },
-            { "desc": "[파괴불가] [진동 폭발] [적중시] 진동 5/5턴 부여", "summary": "" },
-            { "desc": "[파괴불가] [진동 폭발] [적중시] 진동 5/5턴 부여, 호흡 3 획득", "summary": "" }
+            { "desc": "[Unbreakable] [Vibration Burst] [On Hit] Inflict 5 Vibration Potency and Count", "summary": "" },
+            { "desc": "[Unbreakable] [Vibration Burst] [On Hit] Inflict 5 Vibration Potency and Count", "summary": "" },
+            { "desc": "[Unbreakable] [Vibration Burst] [On Hit] Inflict 5 Vibration Potency and Count", "summary": "" },
+            { "desc": "[Unbreakable] [Vibration Burst] [On Hit] Inflict 5 Vibration Potency and Count", "summary": "" },
+            { "desc": "[Unbreakable] [Vibration Burst] [On Hit] Inflict 5 Vibration Potency and Count", "summary": "" },
+            { "desc": "[Unbreakable] [Vibration Burst] [On Hit] Inflict 5 Vibration Potency and Count", "summary": "" },
+            { "desc": "[Unbreakable] [Vibration Burst] [On Hit] Inflict 5 Vibration Potency and Count", "summary": "" },
+            { "desc": "[Unbreakable] [Vibration Burst] [On Hit] Inflict 5 Vibration Potency and Count", "summary": "" },
+            { "desc": "[Unbreakable] [Vibration Burst] [On Hit] Inflict 5 Vibration Potency and Count; gain 3 Breath", "summary": "" }
           ]
         }
       ]
@@ -472,7 +472,7 @@ Out-of-the-box, a custom boss cloned from low-tier base game data often feels we
 | `scale` | Coin damage multiplier | Raise by 1–3 per coin |
 | `skillLevelCorrection` | Flat power bonus (can be negative) | Remove negatives; set to 2–5 |
 
-**Before buffing — 연격 (original):**
+**Before buffing — Consecutive Strike (original):**
 ```json
 "defaultValue": 4,
 "skillLevelCorrection": -1,
@@ -502,7 +502,7 @@ Total power ceiling goes from roughly `4 + (−1) + 3+3+3+5 = 17` to `8 + 3 + 5+
 
 ## 8. Special Mechanic — VibrationExplosion on Every Hit
 
-The centerpiece of the Soji Abi fight is `광역 난사` (Area Barrage): a 9-coin skill where **every single coin** triggers a Vibration Explosion and applies 5 stacks of Vibration for 5 turns.
+The centerpiece of the Soji Abi fight is `Area Barrage`: a 9-coin skill where **every single coin** triggers a Vibration Explosion and applies 5 stacks of Vibration for 5 turns.
 
 ### 8.1 Why This Is Powerful
 
@@ -657,13 +657,13 @@ ArgumentNullException: Value cannot be null (type)
 
 **Cause:** The number of `coindescs` entries in the locale file does not match the number of actual coins in the skill JSON.
 
-**Fix:** Count coins in `soji_skills.json` and set exactly that many `coindescs` entries in the locale file. For `광역 난사` with 9 coins, there must be exactly 9 `coindescs`.
+**Fix:** Count coins in `soji_skills.json` and set exactly that many `coindescs` entries in the locale file. For `Area Barrage` with 9 coins, there must be exactly 9 `coindescs`.
 
 ### 9.5 require-condition.json Errors
 
 **Symptom:** Lines like:
 ```
-[Error : Unity] Modular/TIMING:RoundStart/LUA:starteffects/... 에 해당되는 ID가 없습니다.
+[Error : Unity] No ID exists for Modular/TIMING:RoundStart/LUA:starteffects/...
 ```
 
 **Cause:** These are from *other mods* that depend on `require-condition.json` entries. They are not caused by Soji Abi and do not affect your boss. The errors appear because the modular passive system is checking IDs from every loaded mod simultaneously.
