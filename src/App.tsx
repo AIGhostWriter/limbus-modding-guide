@@ -121,7 +121,9 @@ function DocsRoute() {
   }
   if (originals[location.pathname]) return <AsyncMarkdownDocument label={originals[location.pathname][0]} loader={originals[location.pathname][1]} />
   if (dllDocuments[location.pathname]) return <AsyncMarkdownDocument collection="DLL" label={dllDocuments[location.pathname][0]} loader={dllDocuments[location.pathname][1]} />
-  if (location.pathname === '/docs/reference/functions') return <FunctionCatalog />
+  if (location.pathname === '/docs/reference/glitch') return <FunctionCatalog lockedSource="glitch" title="GlitchScript catalog" />
+  if (location.pathname === '/docs/reference/mt') return <FunctionCatalog lockedSource="mt" title="MT Custom Scripts catalog" />
+  if (location.pathname === '/docs/reference/functions') return <FunctionCatalog title="Complete function catalog" />
   const page = docs[location.pathname] ?? docs['/docs/overview']
   return <Article page={page} />
 }
@@ -132,11 +134,11 @@ function AsyncMarkdownDocument({ label, loader, collection }: { label:string; lo
   return source ? <MarkdownDocument label={label} source={source} collection={collection} /> : <div className="article-wrap"><article className="article"><p>Loading document…</p></article></div>
 }
 
-function FunctionCatalog() {
+function FunctionCatalog({ lockedSource, title }: { lockedSource?: 'glitch'|'mt'; title:string }) {
   const allFunctions = [...functions, ...extendedFunctions]
   const [query, setQuery] = useState('')
   const [category, setCategory] = useState('all')
-  const [source, setSource] = useState('all')
+  const [source, setSource] = useState(lockedSource ?? 'all')
   const visible = allFunctions.filter(item =>
     (category === 'all' || item.category === category) &&
     (source === 'all' || item.source === source || item.source === 'both') &&
@@ -150,8 +152,8 @@ function FunctionCatalog() {
   const cleanExample = (value?: string) => value?.split('\n').filter(line => !/[가-힣]/.test(line)).join('\n').trim()
   return <div className="article-wrap"><article className="article catalog-page">
     <div className="breadcrumbs"><Link to="/">Docs</Link><span>/</span><span>REFERENCE</span></div>
-    <div className="article-head"><span>COMPLETE REFERENCE</span><h1>Script function catalog</h1><p>{allFunctions.length} timings, acquirers, and consequences from the GlitchScript and MT Custom Scripts snapshots. Each entry preserves its callable signature, source, parameters, example, and version label.</p></div>
-    <div className="catalog-tools"><input aria-label="Search functions" value={query} onChange={e => setQuery(e.target.value)} placeholder="Search by function or signature…" /><select aria-label="Filter category" value={category} onChange={e => setCategory(e.target.value)}><option value="all">All categories</option><option value="timing">Timings</option><option value="acquirer">Acquirers</option><option value="consequence">Consequences</option></select><select aria-label="Filter source" value={source} onChange={e => setSource(e.target.value)}><option value="all">All sources</option><option value="glitch">GlitchScript</option><option value="mt">MT Scripts</option></select></div>
+    <div className="article-head"><span>{lockedSource === 'mt' ? 'MT REFERENCE' : lockedSource === 'glitch' ? 'GLITCHSCRIPT REFERENCE' : 'COMPLETE REFERENCE'}</span><h1>{title}</h1><p>{visible.length} timings, acquirers, and consequences in this collection. Each entry preserves its callable signature, source, parameters, example, and version label.</p></div>
+    <div className={`catalog-tools ${lockedSource ? 'locked' : ''}`}><input aria-label="Search functions" value={query} onChange={e => setQuery(e.target.value)} placeholder="Search by function or signature…" /><select aria-label="Filter category" value={category} onChange={e => setCategory(e.target.value)}><option value="all">All categories</option><option value="timing">Timings</option><option value="acquirer">Acquirers</option><option value="consequence">Consequences</option></select>{!lockedSource && <select aria-label="Filter source" value={source} onChange={e => setSource(e.target.value)}><option value="all">All sources</option><option value="glitch">GlitchScript</option><option value="mt">MT Scripts</option></select>}</div>
     <div className="catalog-summary"><b>{visible.length}</b> entries shown <span>•</span> Open an entry to inspect its contract.</div>
     <div className="function-list">{visible.map((item, index) => <details className="function-entry" key={`${item.category}-${item.name}-${index}`}><summary><span className={`kind ${item.category}`}>{item.category}</span><code>{item.name}</code><small>{item.source === 'both' ? 'GlitchScript + MT' : item.source === 'mt' ? 'MT Scripts' : 'GlitchScript'}</small><b>＋</b></summary><div className="function-body"><p>{explain(item)}</p><h3>Signature</h3><CodeBlock code={item.signature} language="modular" />{item.params?.length ? <><h3>Parameters</h3><div className="param-table">{item.params.map(param => <div key={param.name}><code>{param.name}</code><span>Argument accepted by this function. Match its value type and position to the signature.</span></div>)}</div></> : <p className="no-params">No separately documented parameters.</p>}{cleanExample(item.example) && <><h3>Example</h3><CodeBlock code={cleanExample(item.example)!} language="modular" /></>}<div className="contract-note"><b>Verification</b><span>Test this entry alone at a confirmed timing and inspect LogOutput.log before composing it with other functions.</span>{item.version && <em>Version {item.version}</em>}</div></div></details>)}</div>
   </article><Footer /></div>
